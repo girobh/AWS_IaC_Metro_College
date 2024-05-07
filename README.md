@@ -9,3 +9,6 @@ Create a Virtual Private Cloud (VPC) environment:
 * Create two subnets within the VPC, one for the public-facing EC2 instance and the other for the private database instance.
 * Create an Internet Gateway and attach it to the VPC to allow incoming and outgoing traffic.
 
+<h1 align="center">Project Architecture</h1>
+<a target="_blank" rel="noreferrer"> <img src="https://github.com/girobh/AWS_IaC_Metro_College/blob/main/Terraform%20Projects_AWS-rev01-01.png" alt="metroc"/> </a>
+<a target="_blank" rel="noreferrer"> <img src="https://github.com/girobh/AWS_IaC_Metro_College/blob/main/Terraform%20Projects_AWS-rev01-02.png" alt="metroc"/> </a>
