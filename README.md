@@ -14,7 +14,6 @@ Resources:
 * ALB-Target-Group
 * ALB (2 Public Subnet)
 * S3 Bucket-Priv
-* ate [Override- Pass -var]
 * IAM Role (Assumed by EC2)
 * IAM Policy (S3:* FullAccess)
   
