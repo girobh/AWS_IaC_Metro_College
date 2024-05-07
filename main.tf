@@ -1,6 +1,8 @@
 #REGION
 provider "aws" {
-    region = "us-east-2"
+  region     = "us-east-2"
+  access_key = "XXXXX"
+  secret_key = "XXXXX"
 }
 
 # Create a new VPC
@@ -68,6 +70,9 @@ resource "aws_security_group" "ec2_sg" {
   name        = "ec2_security_group"
   description = "Security group for EC2 instances"
   vpc_id      = aws_vpc.lab_vpc.id
+  tags = {
+    Name = "EC2-SG"
+  }
 
   ingress {
     from_port   = 22
@@ -88,6 +93,9 @@ resource "aws_security_group" "alb_sg" {
   name        = "alb_security_group"
   description = "Security group for Application Load Balancer"
   vpc_id      = aws_vpc.lab_vpc.id
+  tags = {
+    Name = "ALB-SG"
+  }
 
   ingress {
     from_port   = 80
@@ -101,6 +109,9 @@ resource "aws_security_group" "rds_sg" {
   name        = "rds_security_group"
   description = "Security group for RDS instances"
   vpc_id      = aws_vpc.lab_vpc.id
+  tags = {
+    Name = "RDS-SG"
+  }
 
   ingress {
     from_port   = 3306
@@ -115,6 +126,10 @@ resource "aws_launch_configuration" "EC2_Launch_Jenkins" {
   name          = "EC2_Launch_Jenkins"
   image_id      = "ami-0ddda618e961f2270"
   instance_type = "t2.micro"
+  key_name      = "devops-project"
+  associate_public_ip_address = true
+  security_groups             = [aws_security_group.ec2_sg.id]
+  
   user_data     = <<-EOF
                   #!/bin/bash
                   sudo echo "installing Jenkins"
@@ -191,8 +206,8 @@ resource "aws_lb_listener" "my_listener" {
 }
 
 # Create a private S3 bucket
-resource "aws_s3_bucket" "igor_bucket_s3" {
-  bucket = "igor-bucket-s3"
+resource "aws_s3_bucket" "igor-project-bucket-s3" {
+  bucket = "igor-project-bucket-s3"
 }
 
 # Create an IAM role
@@ -278,7 +293,8 @@ resource "aws_db_instance" "igor-database" {
   engine_version        = "5.7"
   instance_class        = "db.t3.micro"
   username              = "admin"
-  password              = "Metro@123"
+  password              = "Metro123"
   db_subnet_group_name  = aws_db_subnet_group.my_db_subnet_group.name
   vpc_security_group_ids = [aws_security_group.rds_sg.id]
+  skip_final_snapshot   = true
 }
